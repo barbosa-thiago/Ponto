@@ -1,0 +1,18 @@
+version: '2.4'
+
+services:
+
+  mysql:
+    image: mysql
+    ports:
+      - 3306:3306
+    volumes:
+      - ilia_volume:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_USER: thiago
+      MYSQL_ROOT_PASSWORD: thiago
+      MYSQL_USER: thiago
+      MYSQL_PASSWORD: thiago
+
+volumes:
+  ilia_volume:
