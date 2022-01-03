@@ -7,11 +7,14 @@ import com.ilia.ponto.repository.PontoRepository;
 import com.ilia.ponto.repository.UsuarioRepository;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import javax.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class PontoService {
   private final PontoRepository pontoRepository;
@@ -22,10 +25,11 @@ public class PontoService {
 
     LocalDateTime dateTime = formatDate(date);
 
-    uniqueDateOrThrowBadRequest(dateTime);
-
-
     Usuario usuario = getUsuarioLogado();
+
+    validatingNumberOfRecordsPerDay(dateTime, usuario);
+
+    uniqueDateTimeOrThrowBadRequest(dateTime, usuario);
 
     Ponto ponto = new Ponto(null, dateTime, usuario);
 
@@ -43,8 +47,22 @@ public class PontoService {
         .orElseThrow(() -> new RuntimeException("erro: nenhum usuario encontrado"));
   }
 
-  private void uniqueDateOrThrowBadRequest(LocalDateTime localDateTime) {
-    if(usuarioRepository.findByPontoLocalDateTime(localDateTime).isPresent())
-        throw new BadRequestException("data já consta no banco de dados");
+  private void validatingNumberOfRecordsPerDay(LocalDateTime localDateTime, Usuario usuario) {
+
+    List<Ponto> byUsuarioId = pontoRepository.findByUsuarioId(usuario.getId());
+
+    long count = byUsuarioId.stream()
+        .map(ponto ->
+            ponto.getLocalDateTime().toLocalDate())
+        .filter(date -> date.isEqual(localDateTime.toLocalDate()))
+        .count();
+
+    if(count >= 4)
+      throw new BadRequestException("não é possível registrar mais de 4 pontos por dia");
+  }
+
+  private void uniqueDateTimeOrThrowBadRequest(LocalDateTime localDateTime, Usuario usuario) {
+    if(usuarioRepository.findByIdAndPontoLocalDateTime(usuario.getId(), localDateTime).isPresent())
+        throw new BadRequestException("data e hora já constam no banco de dados");
   }
 }

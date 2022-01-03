@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
@@ -25,13 +27,14 @@ import lombok.ToString;
 @Setter
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
+@Table(name = "Ponto",
+    uniqueConstraints = {@UniqueConstraint(columnNames = {"usuario_id", "localDateTime"})})
 public class Ponto {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @EqualsAndHashCode.Include
   private Long id;
   @NotNull
-  @Column(unique = true)
   private LocalDateTime localDateTime;
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(nullable = false, name = "usuario_id")

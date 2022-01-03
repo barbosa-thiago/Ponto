@@ -38,12 +38,6 @@ public class Usuario {
   @OneToMany(mappedBy = "usuario", cascade = CascadeType.MERGE)
   @Column(unique = true)
   @JsonManagedReference
+  @ToString.Exclude
   private List<Ponto> ponto;
-//  @OneToMany(mappedBy = "usuario")
-//  private List<SegundoPonto> segundoPonto;
-//  @OneToMany(mappedBy = "usuario")
-//  private List<TerceiroPonto> terceiroPonto;
-//  @OneToMany(mappedBy = "usuario")
-//  private List<QuartoPonto> quartoPonto;
-
 }
