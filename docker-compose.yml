@@ -7,12 +7,35 @@ services:
     ports:
       - 3306:3306
     volumes:
-      - ilia_volume:/var/lib/mysql
+      - teste_volume:/var/lib/mysql
     environment:
-      MYSQL_ROOT_USER: thiago
-      MYSQL_ROOT_PASSWORD: thiago
-      MYSQL_USER: thiago
-      MYSQL_PASSWORD: thiago
+      MYSQL_ROOT_USER: ${MYSQL_ROOT_USER}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    environment:
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_PORT: 3306
+      DB_DATABASE: keycloak
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      KEYCLOAK_LOGLEVEL: WARN
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+
+    ports:
+      - 8280:8080
+    expose:
+      - 8280
+    depends_on:
+      - mysql
+    restart: on-failure
 
 volumes:
-  ilia_volume:
+  teste_volume:
+    driver: local

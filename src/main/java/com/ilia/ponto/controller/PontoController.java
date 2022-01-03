@@ -1,10 +1,7 @@
 package com.ilia.ponto.controller;
 
 import com.ilia.ponto.model.Ponto;
-import com.ilia.ponto.repository.PontoRepository;
 import com.ilia.ponto.service.PontoService;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +18,8 @@ public class PontoController {
 
   private final PontoService pontoService;
   @GetMapping
-  public ResponseEntity<String> ponto(String data) {
-    return new ResponseEntity<>("ponto registrado " + data, HttpStatus.OK);
+  public ResponseEntity<String> ponto(@RequestParam String date) {
+    return new ResponseEntity<>("ponto registrado " + date, HttpStatus.OK);
   }
   @PostMapping
   public ResponseEntity<Ponto> save(@RequestParam String date) {

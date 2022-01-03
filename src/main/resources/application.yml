@@ -13,3 +13,18 @@ spring:
     password: thiago
     username: root
     url: jdbc:mysql://localhost:3306/ponto?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
+  main:
+    allow-bean-definition-overriding: true
+logging:
+  level:
+    org.springframework.security: debug
+
+keycloak:
+  auth-server-url: http://localhost:8280/auth
+  realm: usuarios
+  public-client: false
+  resource: ponto
+  ssl-required: external
+  credentials:
+    secret: ${KEYCLOAK_CLIENT_SECRET}
+  enabled: true
