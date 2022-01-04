@@ -4,7 +4,6 @@ import static com.ilia.ponto.util.ObjectCreator.createValidPonto;
 
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.service.PontoService;
-import com.ilia.ponto.util.ObjectCreator;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;

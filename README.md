@@ -42,7 +42,14 @@ O programa requer autenticação para o endpoint que persiste os "pontos", o tok
 ser adquirido com a seguinte requisição: 
 
 ```
-curl -XPOST 'http://localhost:8180/auth/realms/application-users/protocol/openid-connect/token' -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'grant_type=password' --data-urlencode 'username=thiago@barbosa' --data-urlencode 'password=thiago' --data-urlencode 'client_id=public-client'
+curl -XPOST 'http://localhost:8180/auth/realms/usuarios/protocol/openid-connect/token' -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'grant_type=password' --data-urlencode 'username=thiago@barbosa' --data-urlencode 'password=thiago' --data-urlencode 'client_id=public-client'
 ```
 
 ou rodando um Pre-request-script no Postman
+
+###ToDo list:
+
+- Regras de negocio: Horario de almoço
+- Proteger endpoint para criar usuario para ser acessado somente por admin
+- teste de integração
+- mudar PontoController.save pra receber requestBody em vez de RequestParam
