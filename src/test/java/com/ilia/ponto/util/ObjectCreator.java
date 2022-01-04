@@ -2,6 +2,7 @@ package com.ilia.ponto.util;
 
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.model.Usuario;
+import com.ilia.ponto.requestbody.UsuarioPostBody;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,5 +22,13 @@ public class ObjectCreator {
 
   public static Usuario createValidUsuario() {
     return USUARIO;
+  }
+
+  public static UsuarioPostBody createUsuarioPostBody() {
+    return new UsuarioPostBody("secret", USUARIO.getUsername(), USUARIO.getName());
+  }
+
+  public static UsuarioPostBody createInvalidUsuarioPostBody() {
+    return new UsuarioPostBody("secret", null, USUARIO.getName());
   }
 }
