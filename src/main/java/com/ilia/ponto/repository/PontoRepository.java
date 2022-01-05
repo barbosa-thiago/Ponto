@@ -13,7 +13,7 @@ public interface PontoRepository extends JpaRepository<Ponto, Long> {
 
   List<Ponto> findByUsuarioId(UUID id);
 
-  @Query(value = "select case when (count(p) > 3) then 'true' else 'false' end " +
+  @Query(value = "select case when count(p) > 3 then 'true' else 'false' end " +
       "from Ponto as p " +
       "inner join Usuario as u " +
       "on u.id = :id " +

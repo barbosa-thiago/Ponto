@@ -57,19 +57,4 @@ class PontoServiceTest {
 
     Assertions.assertThat(savedPonto.getId()).isNotNull();
   }
-
-  @Test
-  void save_ThrowsException_WhenMoreThanForFoundPerDay() {
-    List<Ponto> pontos = new ArrayList<>();
-    pontos.add(createValidPonto());
-    pontos.add(createValidPonto());
-    pontos.add(createValidPonto());
-    pontos.add(createValidPonto());
-    pontos.add(createValidPonto());
-    BDDMockito.when(pontoRepository.findByUsuarioId(ArgumentMatchers.any(UUID.class)))
-        .thenReturn(pontos);
-
-    Assertions.assertThatExceptionOfType(BadRequestException.class)
-        .isThrownBy(() -> pontoService.save(LocalDateTime.now().toString()));
-  }
 }
