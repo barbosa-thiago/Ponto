@@ -78,7 +78,12 @@ ou rodando um Pre-request-script no Postman
 
 ###ToDo list:
 
-- Regras de negocio: Horario de almoço
 - Proteger endpoint para criar usuario para ser acessado somente por admin
-- teste de integração
-- mudar PontoController.save pra receber requestBody e não RequestParam
+- teste de integração, melhorar cobertura de testes
+- crud métodos restantes
+- swagger implementação
+
+###Possíveis soluções:
+
+- criar domínios do tipo PrimeiroPonto, SegundoPonto, TerceiroPonto etc que estendam o domínio Ponto  
+usando @MappedSuperClass para uma melhor organização dos dados 

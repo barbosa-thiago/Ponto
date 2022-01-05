@@ -2,6 +2,7 @@ package com.ilia.ponto.controller;
 
 import static com.ilia.ponto.util.ObjectCreator.createValidPonto;
 
+import com.ilia.ponto.model.DateInput;
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.service.PontoService;
 import java.time.LocalDateTime;
@@ -32,7 +33,8 @@ class PontoControllerTest {
 
   @Test
   void save_PersistsPonto_WhenSuccessful() {
-    ResponseEntity<Ponto> savedPonto = pontoController.save(LocalDateTime.now().toString());
+
+    ResponseEntity<Ponto> savedPonto = pontoController.save(new DateInput(LocalDateTime.now().toString()));
 
     Assertions.assertThat(savedPonto.getBody().getId()).isNotNull();
   }
