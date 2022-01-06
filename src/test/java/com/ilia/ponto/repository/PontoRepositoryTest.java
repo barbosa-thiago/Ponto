@@ -4,7 +4,6 @@ package com.ilia.ponto.repository;
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.model.Usuario;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
@@ -49,22 +48,6 @@ class PontoRepositoryTest {
 
     Assertions.assertThatExceptionOfType(DataIntegrityViolationException.class)
         .isThrownBy(() -> pontoRepository.save(ponto));
-
-  }
-
-  @Test
-  void findByUserId_ReturnsPontoList_WhenSuccessful() {
-
-    usuarioRepository.save(usuario);
-    pontoRepository.save(ponto);
-
-    List<Ponto> byUsuarioId = pontoRepository.findByUsuarioId(usuario.getId());
-
-    Assertions.assertThat(byUsuarioId.size()).isEqualTo(1);
-    Assertions.assertThat(byUsuarioId.get(0).getId()).isNotNull();
-
-
-    Assertions.assertThat(ponto.getId()).isNotNull().isEqualTo(1);
 
   }
 }

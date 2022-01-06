@@ -59,17 +59,4 @@ class UsuarioRepositoryTest {
     Assertions.assertThat(byUsername.get().getId()).isNotNull();
 
   }
-
-  @Test
-  void findByIdAndPontoLocaDateTime_ReturnsUsuarioOptional_WhenSuccessful() {
-
-    Usuario savedUsuario = usuarioRepository.save(usuario);
-    Ponto savedPonto = pontoRepository.save(this.ponto);
-
-    Optional<Usuario> usuarioFound = usuarioRepository
-        .findByIdAndPontoLocalDateTime(savedUsuario.getId(), savedPonto.getLocalDateTime());
-
-    Assertions.assertThat(usuarioFound.get().getId()).isNotNull();
-
-  }
 }
