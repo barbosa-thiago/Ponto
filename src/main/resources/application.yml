@@ -13,11 +13,9 @@ spring:
       ddl-auto: update
     show-sql: true
   datasource:
-    password: thiago
-    username: root
+    password: ${MYSQL_ROOT_PASSWORD}
+    username: ${MYSQL_ROOT_USER}
     url: jdbc:mysql://localhost:3306/ponto?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true
-#  main:
-#    allow-bean-definition-overriding: true
 logging:
   level:
     org.springframework.security: debug
