@@ -12,16 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("batidas")
+@RequestMapping("schedules")
 @RequiredArgsConstructor
 public class PontoController {
 
   private final PontoService pontoService;
 
   @PostMapping
-  public ResponseEntity<Ponto> save(@RequestBody DateInput dataHora) {
+  public ResponseEntity<Ponto> save(@RequestBody DateInput dateInput) {
 
-    Ponto ponto = pontoService.save(dataHora.getDataHora());
+    Ponto ponto = pontoService.save(dateInput.getDataHora());
     return new ResponseEntity<>(ponto, HttpStatus.CREATED);
   }
 }

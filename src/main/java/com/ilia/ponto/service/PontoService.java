@@ -26,24 +26,24 @@ public class PontoService {
 
   public Ponto save(String dateTime) {
 
-    Usuario usuario = getUsuarioLogado();
+    Usuario usuario = getLoggedUser();
     LocalDateTime dateTimeFormatted = formatDate(dateTime);
 
     List<Ponto> registroDiarioPontosUsuario =
         pontoRepository.registroPontosDiarioUsuarioLogado(dateTimeFormatted, usuario.getId());
 
-    limiteDiarioDeRegistros(registroDiarioPontosUsuario);
-    horarioRetroativoLancaExcecao(registroDiarioPontosUsuario, dateTimeFormatted);
-    dataHoraUnicosParaUsuarioOuLancaExcecao(dateTimeFormatted, registroDiarioPontosUsuario);
-    validandoHoraioAlmoco(registroDiarioPontosUsuario, dateTimeFormatted);
-    sabadoOuDomingoLancamExcecao(dateTimeFormatted);
+    limitSchedulesPerDay(registroDiarioPontosUsuario);
+    backwardTimeThrowsException(registroDiarioPontosUsuario, dateTimeFormatted);
+    uniqueDateTimeForUserOrThrowException(dateTimeFormatted, registroDiarioPontosUsuario);
+    oneHourLunchValidation(registroDiarioPontosUsuario, dateTimeFormatted);
+    saturdaySundayThrowsException(dateTimeFormatted);
 
     Ponto ponto = new Ponto(null, dateTimeFormatted, usuario);
 
     return pontoRepository.save(ponto);
   }
 
-  private void horarioRetroativoLancaExcecao(List<Ponto> pontos, LocalDateTime localDateTime) {
+  private void backwardTimeThrowsException(List<Ponto> pontos, LocalDateTime localDateTime) {
     pontos
         .stream()
         .filter(ponto -> ponto.getLocalDateTime().isAfter(localDateTime))
@@ -59,29 +59,31 @@ public class PontoService {
     return LocalDateTime.parse(date, formatter);
   }
 
-  private void limiteDiarioDeRegistros(List<Ponto> pontos) {
+  private void limitSchedulesPerDay(List<Ponto> pontos) {
     if (pontos.size() > 3) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
           "não é permitido registrar mais um ponto hoje, máximo: 4");
     }
   }
 
-  private Usuario getUsuarioLogado() {
+  private Usuario getLoggedUser() {
     String username = keycloakService.getUsuarioUsername();
     return usuarioRepository.findByUsername(username)
         .orElseThrow(() -> new RuntimeException("erro: nenhum usuario encontrado"));
   }
 
-  private void sabadoOuDomingoLancamExcecao(LocalDateTime localDateTime) {
+  private void saturdaySundayThrowsException(LocalDateTime localDateTime) {
     DayOfWeek dayOfWeek = localDateTime.getDayOfWeek();
-    if (dayOfWeek == DayOfWeek.SATURDAY ||
-        dayOfWeek == DayOfWeek.SUNDAY) {
+    if (dayOfWeek == DayOfWeek.SATURDAY) {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-          "Ponto aos sábados e domingos não é permitido");
+          "Ponto aos sábados não é permitido");
+    } else if(dayOfWeek == DayOfWeek.SUNDAY) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
+          "Ponto aos domingos não é permitido");
     }
   }
 
-  private void dataHoraUnicosParaUsuarioOuLancaExcecao(LocalDateTime localDateTime, List<Ponto> pontos) {
+  private void uniqueDateTimeForUserOrThrowException(LocalDateTime localDateTime, List<Ponto> pontos) {
     pontos.stream()
         .filter(ponto -> ponto.getLocalDateTime().isEqual(localDateTime))
         .forEach(ponto -> {
@@ -90,7 +92,7 @@ public class PontoService {
         });
   }
 
-  private void validandoHoraioAlmoco(List<Ponto> pontos, LocalDateTime localDateTime) {
+  private void oneHourLunchValidation(List<Ponto> pontos, LocalDateTime localDateTime) {
 
     if (pontos.size() < 2) return;
 
