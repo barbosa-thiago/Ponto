@@ -1,8 +1,8 @@
-#Ponto
+# Ponto
 
-###API de controle de ponto para colaboradores
+### API de controle de ponto para colaboradores
 
-####Descrição:
+#### Descrição:
 
 Este Programa para controle de pontos usa as tecnologias:
 - Keycloak
@@ -17,7 +17,7 @@ Portas:
 - comunicação com banco de dados: 3306 (rodando no docker ou nativamente)
 - comunicação com keycloak: 8280 (docker ou nativamente)
 
-####Endpoints:
+#### Endpoints:
 
 - localhost:8080/usuario
     - json exemplo:
@@ -37,7 +37,7 @@ Portas:
 http://localhost:8081/batidas?date=2020-12-05T10:15:19
 ```
 
-###Rodando a api:
+### Rodando a api:
 
 - o programa requer um arquivo ```.env``` ou similar para guardar as credenciais usadas, o arquivo  
 deve conter os valores como no modelo a seguir e ser reconhecido nas variáveis de ambiente:
@@ -57,7 +57,7 @@ Uma das maneiras de passar o arquivo para o Environment é usando o plugin *EnvF
 - em ```localhost:8280```, logar com as credenciais do keycloak
 - logado no keycloak, criar uma realm chamada "usuarios"
 - em *usuarios*, criar um client chamado *ponto-public*
-- em *usuarios*, criar outro client chamado *ponto-public* e configurar:
+- em *usuarios*, criar outro client chamado *ponto* e configurar:
     - **Access Type** para confidential
     - **Authorization Enabled** para "on"
     - **Valid Redirect Urls** preencher com "*"
@@ -65,7 +65,7 @@ Uma das maneiras de passar o arquivo para o Environment é usando o plugin *EnvF
     e preencher no arquivo *.env*
 
 
-####Segurança:
+#### Segurança:
 
 O programa requer autenticação para o endpoint que persiste os "pontos", o token pode   
 ser adquirido com a seguinte requisição: 
@@ -76,14 +76,14 @@ curl -XPOST 'http://localhost:8180/auth/realms/usuarios/protocol/openid-connect/
 
 ou rodando um Pre-request-script no Postman
 
-###ToDo list:
+### ToDo list:
 
 - Proteger endpoint para criar usuario para ser acessado somente por admin
 - teste de integração, melhorar cobertura de testes
 - crud métodos restantes
 - swagger implementação
 
-###Possíveis soluções:
+### Possíveis soluções:
 
 - criar domínios do tipo PrimeiroPonto, SegundoPonto, TerceiroPonto etc que estendam o domínio Ponto  
 usando @MappedSuperClass para uma melhor organização dos dados 
