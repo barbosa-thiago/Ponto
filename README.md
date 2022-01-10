@@ -30,7 +30,7 @@ Portas:
 }
 ```
  
-- localhost:8080/batidas 
+- localhost:8080/schedules 
     - url exemplo:
     
 ```
@@ -56,13 +56,15 @@ Uma das maneiras de passar o arquivo para o Environment é usando o plugin *EnvF
 - com isso, da raiz do projeto, rodar o comando: ```docker-compose up```
 - em ```localhost:8280```, logar com as credenciais do keycloak
 - logado no keycloak, criar uma realm chamada "usuarios"
-- em *usuarios*, criar um client chamado *ponto-public*
-- em *usuarios*, criar outro client chamado *ponto* e configurar:
+- em *usuarios*, vá em *clients* e crie um client chamado *ponto-public*
+- mais uma vez em clients, criar outro client chamado *ponto* e configurar:
     - **Access Type** para confidential
     - **Authorization Enabled** para "on"
     - **Valid Redirect Urls** preencher com "*"
+    - Na aba **Service Account Roles**, em **Client Roles**, selecione **realm-management** e adicione  
+    a role **manage-users**
     - Ainda nas configurações do client *ponto*, ir na aba *credentials*, copiar o valor de *client secret*  
-    e preencher no arquivo *.env*
+    e preencher no arquivo *.env*.
 
 
 #### Segurança:
