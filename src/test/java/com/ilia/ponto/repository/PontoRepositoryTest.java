@@ -3,8 +3,9 @@ package com.ilia.ponto.repository;
 
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.model.Usuario;
+import com.ilia.ponto.util.ObjectCreator;
 import java.time.LocalDateTime;
-import java.util.UUID;
+import java.util.List;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -27,8 +28,8 @@ class PontoRepositoryTest {
   @Autowired
   UsuarioRepository usuarioRepository;
 
-  Usuario usuario = new Usuario(UUID.randomUUID(), "john", "john", null);
-  Ponto ponto = new Ponto(null, LocalDateTime.now(), usuario);
+  Ponto ponto = ObjectCreator.createValidPonto();
+  Usuario usuario = ponto.getUsuario();
 
 
 
@@ -48,6 +49,18 @@ class PontoRepositoryTest {
 
     Assertions.assertThatExceptionOfType(DataIntegrityViolationException.class)
         .isThrownBy(() -> pontoRepository.save(ponto));
+
+  }
+
+  @Test
+  void findUserSchedulesPerDay_ReturnsPontoList_WhenSuccessful() {
+
+    usuarioRepository.save(usuario);
+    pontoRepository.save(ponto);
+
+    List<Ponto> userSchedulesPerDay =
+        pontoRepository.findUserSchedulesPerDay(ponto.getLocalDateTime(), usuario.getId());
+    Assertions.assertThat(userSchedulesPerDay.get(0).getId()).isNotNull();
 
   }
 }
