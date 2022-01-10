@@ -21,7 +21,7 @@ public interface PontoRepository extends JpaRepository<Ponto, Long> {
       ":#{#localDateTime.withHour(0).withMinute(0).withSecond(0)} " +
       "and " +
       "p.localDateTime < :#{#localDateTime.withHour(23).withMinute(59).withSecond(59)}")
-  List<Ponto> registroPontosDiarioUsuarioLogado(@Param("localDateTime") LocalDateTime localDateTime, @Param("id") UUID id);
+  List<Ponto> findUserSchedulesPerDay(@Param("localDateTime") LocalDateTime localDateTime, @Param("id") UUID id);
 
 
 }

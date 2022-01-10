@@ -54,7 +54,7 @@ class PontoServiceTest {
     BDDMockito.when(pontoRepository.save(ArgumentMatchers.any(Ponto.class)))
         .thenReturn(ponto);
     BDDMockito.when(pontoRepository
-        .registroPontosDiarioUsuarioLogado(
+        .findUserSchedulesPerDay(
             ArgumentMatchers.any(LocalDateTime.class),
             ArgumentMatchers.eq(usuario.getId())))
         .thenReturn(List.of(ponto));
@@ -92,7 +92,7 @@ class PontoServiceTest {
     List<Ponto> pontos = List.of(this.ponto, new Ponto(2L, localDateTime, usuario));
 
     BDDMockito.when(
-        pontoRepository.registroPontosDiarioUsuarioLogado(
+        pontoRepository.findUserSchedulesPerDay(
             ArgumentMatchers.any(LocalDateTime.class),
             ArgumentMatchers.eq(usuario.getId())))
         .thenReturn(new ArrayList<>(pontos));
@@ -127,7 +127,7 @@ class PontoServiceTest {
             new Ponto(4L, localDateTime.plusHours(2), usuario));
 
     BDDMockito.when(
-        pontoRepository.registroPontosDiarioUsuarioLogado(
+        pontoRepository.findUserSchedulesPerDay(
             ArgumentMatchers.any(LocalDateTime.class),
             ArgumentMatchers.eq(usuario.getId())))
         .thenReturn(new ArrayList<>(pontos));

@@ -30,7 +30,7 @@ public class PontoService {
     LocalDateTime dateTimeFormatted = formatDate(dateTime);
 
     List<Ponto> registroDiarioPontosUsuario =
-        pontoRepository.registroPontosDiarioUsuarioLogado(dateTimeFormatted, usuario.getId());
+        pontoRepository.findUserSchedulesPerDay(dateTimeFormatted, usuario.getId());
 
     limitSchedulesPerDay(registroDiarioPontosUsuario);
     backwardTimeThrowsException(registroDiarioPontosUsuario, dateTimeFormatted);
