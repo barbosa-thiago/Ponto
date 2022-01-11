@@ -81,9 +81,7 @@ ou rodando um Pre-request-script no Postman
 ### ToDo list:
 
 - Proteger endpoint para criar usuario para ser acessado somente por admin
-- teste de integração, melhorar cobertura de testes
 - crud métodos restantes
-- swagger implementação
 
 ### Possíveis soluções:
 
