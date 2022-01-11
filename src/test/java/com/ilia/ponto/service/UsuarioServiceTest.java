@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.ilia.ponto.keycloak.KeycloakService;
 import com.ilia.ponto.model.Usuario;
 import com.ilia.ponto.repository.UsuarioRepository;
+import com.ilia.ponto.requestbody.UsuarioPostBody;
 import com.ilia.ponto.util.ObjectCreator;
 import java.util.Optional;
 import java.util.UUID;
@@ -61,7 +62,8 @@ class UsuarioServiceTest {
     BDDMockito.when(usuarioRepository.findByUsername(ArgumentMatchers.anyString()))
         .thenReturn(Optional.of(createValidUsuario()));
 
-    Assertions.assertThatExceptionOfType(BadRequestException.class)
-        .isThrownBy(() -> usuarioService.save(createUsuarioPostBody()));
+    UsuarioPostBody usuarioPostBody = createUsuarioPostBody();
+    Assertions.assertThatExceptionOfType(ResponseStatusException.class)
+        .isThrownBy(() -> usuarioService.save(usuarioPostBody));
   }
 }

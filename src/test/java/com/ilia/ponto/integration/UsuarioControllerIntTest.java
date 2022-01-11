@@ -10,8 +10,6 @@ import com.ilia.ponto.repository.PontoRepository;
 import com.ilia.ponto.repository.UsuarioRepository;
 import com.ilia.ponto.requestbody.UsuarioPostBody;
 import java.time.LocalDateTime;
-import javax.ws.rs.BadRequestException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -86,15 +84,13 @@ class UsuarioControllerIntTest {
   void save_ThrowsException_WhenUsernameExists() {
 
     UsuarioPostBody usuarioPostBody = createUsuarioPostBody();
-//    usuarioPostBody.setPassword(null);
 
-    Assertions.assertThatCode(() ->
     webTestClient.post()
         .uri("/usuario")
         .contentType(MediaType.APPLICATION_JSON)
         .bodyValue(usuarioPostBody)
         .exchange()
-        .expectStatus().isBadRequest()).getCause().getCause().isInstanceOf(BadRequestException.class);
+        .expectStatus().isBadRequest();
 
   }
 
