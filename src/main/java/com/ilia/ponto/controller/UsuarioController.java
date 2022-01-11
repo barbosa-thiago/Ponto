@@ -3,6 +3,7 @@ package com.ilia.ponto.controller;
 import com.ilia.ponto.model.Usuario;
 import com.ilia.ponto.requestbody.UsuarioPostBody;
 import com.ilia.ponto.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ public class UsuarioController {
   private final UsuarioService usuarioService;
 
   @PostMapping
+  @Operation(summary = "Cria Usuário")
   public ResponseEntity<Usuario> save(@RequestBody @Valid UsuarioPostBody usuarioPostBody) {
     return new ResponseEntity<>(usuarioService.save(usuarioPostBody), HttpStatus.CREATED);
   }

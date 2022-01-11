@@ -3,6 +3,8 @@ package com.ilia.ponto.controller;
 import com.ilia.ponto.model.DateInput;
 import com.ilia.ponto.model.Ponto;
 import com.ilia.ponto.service.PontoService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,8 @@ public class PontoController {
   private final PontoService pontoService;
 
   @PostMapping
+  @Operation(summary = "Registra ponto ", description = "formato data: yyyy-MM-ddTHH:mm:ss")
+  @SecurityRequirement(name = "bearerAuth")
   public ResponseEntity<Ponto> save(@RequestBody DateInput dateInput) {
 
     Ponto ponto = pontoService.save(dateInput.getDataHora());
