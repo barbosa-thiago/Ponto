@@ -1,5 +1,6 @@
 package com.ilia.ponto.model;
 
+import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -8,5 +9,6 @@ import lombok.RequiredArgsConstructor;
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class DateInput {
+  @NotEmpty
   private String dataHora;
 }

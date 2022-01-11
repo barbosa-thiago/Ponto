@@ -3,6 +3,7 @@ package com.ilia.ponto.handler;
 import com.ilia.ponto.exception.ExceptionDetails;
 import com.ilia.ponto.exception.ValidationExceptionDetails;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.stream.Collectors;
 import javax.validation.ConstraintViolationException;
@@ -36,7 +37,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   @ExceptionHandler(ResponseStatusException.class)
-  public ResponseEntity<ExceptionDetails> handleBadRequestException(ResponseStatusException exception) {
+  public ResponseEntity<ExceptionDetails> handleResponseStatusException(ResponseStatusException exception) {
 
     return new ResponseEntity<>(
         ExceptionDetails.builder()
@@ -90,5 +91,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         .developerMessage(exception.getMessage())
         .build();
     return new ResponseEntity<>(exceptionDetails, headers, status);
+  }
+
+  @ExceptionHandler(DateTimeParseException.class)
+  public ResponseEntity<ExceptionDetails>
+  handleDateTimeParseException(final DateTimeParseException exception) {
+
+    return new ResponseEntity<>(
+        ExceptionDetails.builder()
+            .exception(exception.getClass().getSimpleName())
+            .details("Data em formato inválido. Padrao correto: 2022-12-31T00:00:00")
+            .developerMessage(exception.getMessage())
+            .status(HttpStatus.BAD_REQUEST.value())
+            .timeStamp(LocalDateTime.now())
+            .build(), HttpStatus.BAD_REQUEST);
   }
 }
