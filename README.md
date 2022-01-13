@@ -19,7 +19,11 @@ Portas:
 
 #### Endpoints:
 
-- localhost:8080/usuario
+##### Uma lista mais detalhada dos endpoints podera ser vista na documentação do swagger após  rodar a aplicação:  
+
+```http://localhost:8080/swagger-ui.html```  
+
+- localhost:8080/usuario (post)
     - json exemplo:
     
 ```
@@ -30,17 +34,23 @@ Portas:
 }
 ```
  
-- localhost:8080/schedules 
-    - url exemplo:
+- localhost:8080/schedules (post) 
+    - json exemplo:
     
 ```
-http://localhost:8081/batidas?date=2020-12-05T10:15:19
+{
+    "dateTime": "2022-01-03T08:00:00"
+}  
 ```
 
 ### Rodando a api:
 
 - o programa requer um arquivo ```.env``` ou similar para guardar as credenciais usadas, o arquivo  
-deve conter os valores como no modelo a seguir e ser reconhecido nas variáveis de ambiente:
+deve conter os valores como no arquivo modelo ```.envTemplate``` na raiz do projeto. O arquivo  
+precisa ainda ser reconhecido nas variáveis de ambiente:
+
+- obs: O valor de **KEYCLOAK_CLIENT_SECRET** deverá ser preenchido mais adiante.
+
 ```
 MYSQL_ROOT_USER=***
 MYSQL_ROOT_PASSWORD=***
@@ -54,16 +64,16 @@ KEYCLOAK_CLIENT_SECRET=886c8812-ff41-4e6b-9584-4d2a9eb27896
 Uma das maneiras de passar o arquivo para o Environment é usando o plugin *EnvFile* no Intellij
 
 - com isso, da raiz do projeto, rodar o comando: ```docker-compose up```
-- em ```localhost:8280```, logar com as credenciais do keycloak
-- logado no keycloak, criar uma realm chamada "usuarios"
-- em *usuarios*, vá em *clients* e crie um client chamado *ponto-public*
-- mais uma vez em clients, criar outro client chamado *ponto* e configurar:
+- em ```localhost:8280```, logar no keycloak com as credenciais do arquivo **.env**
+- logado no keycloak, criar uma realm chamada **"usuarios"**
+- na realm *usuarios*, vá em *clients* e crie um client chamado *ponto-public*
+- mais uma vez em clients, criar ***outro client*** chamado **ponto** e configurar:
     - **Access Type** para confidential
     - **Authorization Enabled** para "on"
     - **Valid Redirect Urls** preencher com "*"
     - Na aba **Service Account Roles**, em **Client Roles**, selecione **realm-management** e adicione  
     a role **manage-users**
-    - Ainda nas configurações do client *ponto*, ir na aba *credentials*, copiar o valor de *client secret*  
+    - Ainda nas configurações do client *ponto*, ir na aba *credentials*, copiar o valor de **client secret**  
     e preencher no arquivo *.env*.
 
 
@@ -73,7 +83,13 @@ O programa requer autenticação para o endpoint que persiste os "pontos", o tok
 ser adquirido com a seguinte requisição: 
 
 ```
-curl -XPOST 'http://localhost:8180/auth/realms/usuarios/protocol/openid-connect/token' -H 'Content-Type: application/x-www-form-urlencoded' --data-urlencode 'grant_type=password' --data-urlencode 'username=thiago@barbosa' --data-urlencode 'password=thiago' --data-urlencode 'client_id=public-client'
+curl -XPOST 'http://localhost:8180/auth/realms/usuarios/protocol/openid-connect/token' \
+-H 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'grant_type=password' \
+--data-urlencode 'username=<user-username>' \
+--data-urlencode 'password=<user-password>' \
+--data-urlencode \
+'client_id=public-client'
 ```
 
 ou rodando um Pre-request-script no Postman
