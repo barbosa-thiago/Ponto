@@ -10,5 +10,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DateInput {
   @NotEmpty
-  private String dataHora;
+  private String dateTime;
 }
