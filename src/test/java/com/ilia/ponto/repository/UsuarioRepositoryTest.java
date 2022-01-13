@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.test.annotation.DirtiesContext;
 
@@ -58,5 +59,13 @@ class UsuarioRepositoryTest {
     Optional<Usuario> byUsername = usuarioRepository.findByUsername(usuario.getUsername());
     Assertions.assertThat(byUsername.get().getId()).isNotNull();
 
+  }
+
+  @Test
+  @Order(1)
+  void findAllProjectedBy_ResturnsUsuarioPage_WhenSuccessful() {
+    usuarioRepository.save(usuario);
+
+    Assertions.assertThat(usuarioRepository.getAllProjectedBy(PageRequest.of(0, 5)).toList().get(0)).isNotNull();
   }
 }

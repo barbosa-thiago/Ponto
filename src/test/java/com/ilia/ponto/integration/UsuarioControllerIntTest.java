@@ -1,6 +1,5 @@
 package com.ilia.ponto.integration;
 
-import static com.ilia.ponto.util.ObjectCreator.createPontoToBeSaved;
 import static com.ilia.ponto.util.ObjectCreator.createUsuarioPostBody;
 import static com.ilia.ponto.util.ObjectCreator.createValidUsuario;
 
@@ -9,7 +8,6 @@ import com.ilia.ponto.model.Usuario;
 import com.ilia.ponto.repository.PontoRepository;
 import com.ilia.ponto.repository.UsuarioRepository;
 import com.ilia.ponto.requestbody.UsuarioPostBody;
-import java.time.LocalDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -51,7 +49,6 @@ class UsuarioControllerIntTest {
 
   Usuario validUsuario = createValidUsuario();
 
-  LocalDateTime localDateTime = createPontoToBeSaved().getLocalDateTime();
 
 
   @BeforeEach
@@ -107,6 +104,19 @@ class UsuarioControllerIntTest {
             .bodyValue(usuarioPostBody)
             .exchange()
             .expectStatus().isBadRequest();
+
+  }
+
+  @Test
+  @Order(0)
+  @DisplayName("findAllProjectedBy returns UserPage when successful")
+  void findAllProjectedBy_ReturnsUserPage_WhenSuccessful() {
+
+    webTestClient.get()
+        .uri("/usuario")
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isOk().expectBody().jsonPath("$.numberOfElements").isEqualTo(1);
 
   }
 }

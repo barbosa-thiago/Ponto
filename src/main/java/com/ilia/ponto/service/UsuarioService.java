@@ -3,10 +3,14 @@ package com.ilia.ponto.service;
 import com.ilia.ponto.keycloak.KeycloakService;
 import com.ilia.ponto.mappers.UsuarioMapper;
 import com.ilia.ponto.model.Usuario;
+import com.ilia.ponto.projection.UsuarioUsernameId;
 import com.ilia.ponto.repository.UsuarioRepository;
 import com.ilia.ponto.requestbody.UsuarioPostBody;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,7 +34,13 @@ public class UsuarioService {
   }
 
   private void uniqueUsernameOrThrowBadRequest(UsuarioPostBody usuarioPostBody) {
-    if(usuarioRepository.findByUsername(usuarioPostBody.getUsername()).isPresent())
+    String username = usuarioPostBody.getUsername();
+    Optional<Usuario> byUsername = usuarioRepository.findByUsername(username);
+    if(byUsername.isPresent())
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "username precisa ser único");
     }
+
+  public Page<UsuarioUsernameId> findAll(Pageable pageable) {
+    return usuarioRepository.getAllProjectedBy(pageable);
+  }
 }
