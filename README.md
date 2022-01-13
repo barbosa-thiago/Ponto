@@ -63,18 +63,23 @@ KEYCLOAK_CLIENT_SECRET=886c8812-ff41-4e6b-9584-4d2a9eb27896
 
 Uma das maneiras de passar o arquivo para o Environment é usando o plugin *EnvFile* no Intellij
 
-- com isso, da raiz do projeto, rodar o comando: ```docker-compose up```
-- em ```localhost:8280```, logar no keycloak com as credenciais do arquivo **.env**
+- com o arquivo **.env** preenchido, da raiz do projeto, rodar o comando: ```docker-compose up```
+
+- em ```localhost:8280/auth```, selecionar **Administration Console** e efetuar login no keycloak com as  
+credenciais do arquivo **.env**
+
 - logado no keycloak, criar uma realm chamada **"usuarios"**
+
 - na realm *usuarios*, vá em *clients* e crie um client chamado *ponto-public*
-- mais uma vez em clients, criar ***outro client*** chamado **ponto** e configurar:
+
+- mais uma vez em clients, criar **outro client** chamado ***ponto*** e configurar:
     - **Access Type** para confidential
     - **Authorization Enabled** para "on"
     - **Valid Redirect Urls** preencher com "*"
     - Na aba **Service Account Roles**, em **Client Roles**, selecione **realm-management** e adicione  
     a role **manage-users**
-    - Ainda nas configurações do client *ponto*, ir na aba *credentials*, copiar o valor de **client secret**  
-    e preencher no arquivo *.env*.
+    - Ainda nas configurações do client ***ponto***, ir na aba *credentials*, copiar o valor de **client secret**  
+    e preencher no arquivo *.env* em **KEYCLOAK_CLIENT_SECRET**.
 
 
 #### Segurança:
