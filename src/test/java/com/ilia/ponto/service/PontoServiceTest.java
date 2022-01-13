@@ -14,6 +14,7 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -27,6 +28,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -51,8 +55,12 @@ class PontoServiceTest {
 
   @BeforeEach
   void setup() {
+    Ponto validPonto = createValidPonto();
+    PageImpl<Ponto> pontoPage = new PageImpl<>(List.of(validPonto));
+    
     BDDMockito.when(pontoRepository.save(ArgumentMatchers.any(Ponto.class)))
         .thenReturn(ponto);
+    
     BDDMockito.when(pontoRepository
         .findUserSchedulesPerDay(
             ArgumentMatchers.any(LocalDateTime.class),
@@ -64,6 +72,12 @@ class PontoServiceTest {
 
     BDDMockito.when(usuarioRepository.findByUsername(ArgumentMatchers.anyString()))
         .thenReturn(Optional.of(usuario));
+
+    BDDMockito.when(pontoRepository.findPontosPerUserLast30days(
+        ArgumentMatchers.any(PageRequest.class),
+        ArgumentMatchers.any(UUID.class),
+        ArgumentMatchers.any(LocalDateTime.class)))
+        .thenReturn(pontoPage);
   }
 
   @Test
@@ -161,5 +175,15 @@ class PontoServiceTest {
         .isThrownBy(() -> pontoService.save(saturday));
     Assertions.assertThatExceptionOfType(ResponseStatusException.class)
         .isThrownBy(() -> pontoService.save(sunday));
+  }
+
+  @Test
+  void findPontosPerUserLast30days_ReturnsPontoPage_WhenSuccessful() {
+
+    Ponto savedPonto = pontoService.save(localDateTime.toString());
+
+    Page<Ponto> pontosPerUserLast30days =
+        pontoService.findPontosPerUserLast30days(PageRequest.of(0, 1), UUID.randomUUID());
+    Assertions.assertThat(pontosPerUserLast30days.toList().get(0).getId()).isNotNull();
   }
 }

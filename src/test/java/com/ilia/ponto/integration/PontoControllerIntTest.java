@@ -11,8 +11,6 @@ import com.ilia.ponto.model.Usuario;
 import com.ilia.ponto.repository.PontoRepository;
 import com.ilia.ponto.repository.UsuarioRepository;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeParseException;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -86,6 +84,24 @@ class PontoControllerIntTest {
 
   @Test
   @Order(0)
+  @DisplayName("save_ThrowsException_WhenInvalidDate")
+  void findPontosPerUserLast30days_ReturnsPontoPage_WhenSuccessful() {
+
+    Usuario usuario = usuarioRepository.save(validUsuario);
+
+    webTestClient.get()
+        .uri(uriBuilder ->
+            uriBuilder
+                .path("/schedules/listForUser").queryParam("userId", usuario.getId()).build())
+        .accept(MediaType.APPLICATION_JSON)
+        .exchange()
+        .expectStatus().isOk()
+        .expectBody().jsonPath("$.numberOfElements").isEqualTo(1);
+
+  }
+
+  @Test
+  @Order(0)
   @DisplayName("save_ThrowsException_WhenDuplicateDateTime")
   void save_ThrowsException_WhenDuplicateDateTime() {
 
@@ -125,12 +141,11 @@ class PontoControllerIntTest {
 
     usuarioRepository.save(validUsuario);
 
-    Assertions.assertThatThrownBy(() ->
         webTestClient.post()
             .uri("/schedules")
             .contentType(MediaType.APPLICATION_JSON)
             .bodyValue(new DateInput("8:00:00"))
-            .exchange()).getCause().getCause().isInstanceOf(DateTimeParseException.class);
+            .exchange().expectStatus().is4xxClientError();
 
   }
 

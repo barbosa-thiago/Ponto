@@ -10,8 +10,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Comparator;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -41,6 +44,11 @@ public class PontoService {
     Ponto ponto = new Ponto(null, dateTimeFormatted, usuario);
 
     return pontoRepository.save(ponto);
+  }
+
+  public Page<Ponto> findPontosPerUserLast30days(Pageable pageable, UUID id) {
+    LocalDateTime now = LocalDateTime.now();
+    return pontoRepository.findPontosPerUserLast30days(pageable, id, now);
   }
 
   private void backwardTimeThrowsException(List<Ponto> pontos, LocalDateTime localDateTime) {
