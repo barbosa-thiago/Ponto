@@ -33,7 +33,7 @@ public class PontoController {
   @PostMapping
   @Operation(summary = "Registra ponto ", description = "formato data: yyyy-MM-ddTHH:mm:ss")
   @ApiResponses(value = {@ApiResponse(responseCode = "201", description = "created successfully"),
-      @ApiResponse(responseCode = "401", description = "unauthorized")})
+      @ApiResponse(responseCode = "400", description = "data invalida. Checar mensagem de erro")})
   @SecurityRequirement(name = "bearerAuth")
   public ResponseEntity<Ponto> save(@RequestBody @Valid DateInput dateTime) {
 
